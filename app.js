@@ -7,25 +7,25 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const fileUpload = require('express-fileupload');
+const PORT = process.env.PORT || 5000;
 
 
 app.set('view engine', 'ejs');
 app.set('views', './views');
-
-
-// mongoose.connect('mongodb+srv://' + process.env.MONGOO_ATLAS_DB_NAME + ':' + process.env.MONGOO_ATLAS_PW + '@cluster0.3u6wx.mongodb.net/webdemoapi?retryWrites=true&w=majority', {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//     useCreateIndex: true
-// })
-
-mongoose.connect(process.env.MONGODB_URI, {
-    dbName: process.env.MONGOO_ATLAS_DB_NAME,
-    user: process.env.CLOUD_NAME,
-    pass: process.env.MONGOO_ATLAS_PW,
+mongoose.connect('mongodb+srv://' + process.env.MONGOO_ATLAS_DB_NAME + ':' + process.env.MONGOO_ATLAS_PW + '@cluster0.3u6wx.mongodb.net/webdemoapi?retryWrites=true&w=majority', {
+    useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true
 })
+
+// mongoose.connect(process.env.MONGODB_URI, {
+//     dbName: process.env.MONGOO_ATLAS_DB_NAME,
+//     user: process.env.CLOUD_NAME,
+//     pass: process.env.MONGOO_ATLAS_PW,
+//     useUnifiedTopology: true,
+//     useCreateIndex: true,
+//     useNewUrlParser: true
+// })
 
 app.use('/uploads', express.static('uploads'));
 app.use(morgan('dev'));
@@ -55,9 +55,6 @@ const userRouters = require('./api/routes/user');
 const adminRouters = require('./api/routes/admin');
 const uploadRouters = require('./api/routes/upload');
 
-app.listen(2228, function () {
-    console.log('ok');
-});
 
 // const Product = require('./api/Models/Product');
 
@@ -143,3 +140,6 @@ app.use((error, req, res, next) => {
     })
 })
 
+app.listen(PORT, function () {
+    console.log('ok');
+});
