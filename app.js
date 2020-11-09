@@ -95,26 +95,9 @@ app.use('/admin', adminRouters);
 app.use('/admin', uploadRouters);
 
 app.get('/', function (req, res) {
-    const products = ({
-        Name: 'JBL EON ONE Compact',
-        Image: [
-            './public/img1.jpg'
-        ],
-        Price: 12990000,
-        Sale: 0,
-        Information: [
-            'Loa Bluetooth di động với hiệu ứng ánh sáng.',
-            'Công suất lên tới 240W cùng chất âm mạnh mẽ, tiếng bass được tái hiện rõ ràng.',
-            'Dung lượng pin 10.000mAh giúp phát nhạc lên đến 18 giờ.'
-        ],
-        Details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
-        Catelory: 'Speaker',
-        Producers: 'JPL',
-        Warranties: 6,
-        News: false,
-        Hots: true
-    });
-    res.send(products);
+    res.status(200).json({
+        waring: 'API này của bố mầy'
+    })
 })
 
 app.use((req, res, next) => {
