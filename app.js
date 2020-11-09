@@ -95,7 +95,7 @@ app.use('/admin', adminRouters);
 app.use('/admin', uploadRouters);
 
 app.get('/', function (req, res) {
-    const products = new Product({
+    const products = ({
         Name: 'JBL EON ONE Compact',
         Image: [
             './public/img1.jpg'
