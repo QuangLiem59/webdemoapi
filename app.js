@@ -18,14 +18,6 @@ mongoose.connect('mongodb+srv://' + process.env.MONGOO_ATLAS_DB_NAME + ':' + pro
     useCreateIndex: true
 })
 
-// mongoose.connect(process.env.MONGODB_URI, {
-//     dbName: process.env.MONGOO_ATLAS_DB_NAME,
-//     user: process.env.CLOUD_NAME,
-//     pass: process.env.MONGOO_ATLAS_PW,
-//     useUnifiedTopology: true,
-//     useCreateIndex: true,
-//     useNewUrlParser: true
-// })
 
 app.use('/uploads', express.static('uploads'));
 app.use(morgan('dev'));
