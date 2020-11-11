@@ -2,8 +2,7 @@ const Product = require('../Models/Product');
 const mongoose = require('mongoose');
 const cloudinary = require('../../cloudinary');
 const fs = require('fs');
-const { url } = require('inspector');
-const { isObject, isArray } = require('util');
+const { isArray } = require('util');
 
 class APIfeatures {
     constructor(query, queryString) {
@@ -49,52 +48,14 @@ exports.product_get_all = async (req, res, next) => {
         const features = new APIfeatures(Product.find(), req.query).filtering().sorting().paginating();
         const products = await features.query;
 
-        res.json({
+        return res.status(200).json({
             status: 'Success',
             count: products.length,
             product: products
         });
     } catch (err) {
-        res.status(500).json({ error: err });
+        return res.status(500).json({ error: err });
     }
-    // Product.find()
-    //     .exec()
-    //     .then(result => {
-    //         const response = {
-    //             count: result.length,
-    //             products: result.map(docs => {
-    //                 return {
-    //                     _id: docs._id,
-    //                     Name: docs.Name,
-    //                     Price: docs.Price,
-    //                     Image: docs.Image,
-    //                     Sale: docs.Sale,
-    //                     Information: docs.Information,
-    //                     Details: docs.Details,
-    //                     Warranties: docs.Warranties,
-    //                     Category: docs.Category,
-    //                     Producer: docs.Producer,
-    //                     Hots: docs.Hots,
-    //                     News: docs.News,
-    //                     request: {
-    //                         type: 'GET',
-    //                         url: 'http://localhost:2228/product/' + docs._id,
-    //                     }
-    //                 }
-    //             })
-    //         }
-    //         if (result.length > 0) {
-    //             res.status(200).json(response);
-    //         } else {
-    //             res.status(404).json({
-    //                 message: "Nothing"
-    //             })
-    //         }
-    //     })
-    //     .catch(err => {
-    //         console.log(err);
-    //         res.status(500).json({ error: err });
-    //     })
 }
 
 exports.product_get_by_id = (req, res, next) => {
@@ -131,7 +92,6 @@ exports.product_add_product = async (req, res, next) => {
     }
     else {
         const images = req.files.Image;
-        // return res.status(400).json(isArray(images))
         if (!isArray(images)) {
             if (!images.mimetype.match(/jpe|jpeg|png|gif$i/)) {
                 return res.status(400).json({ message: "File format is incorret" })

@@ -1,6 +1,5 @@
 require('dotenv').config();
 const express = require('express');
-// const jwt = require('jsonwebtoken');
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
@@ -12,11 +11,18 @@ const PORT = process.env.PORT || 5000;
 
 app.set('view engine', 'ejs');
 app.set('views', './views');
-mongoose.connect('mongodb+srv://' + process.env.MONGOO_ATLAS_DB_NAME + ':' + process.env.MONGOO_ATLAS_PW + '@cluster0.3u6wx.mongodb.net/webdemoapi?retryWrites=true&w=majority', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true
-})
+mongoose.connect('mongodb+srv://'
+    + process.env.MONGOO_ATLAS_DB_NAME + ':' + process.env.MONGOO_ATLAS_PW +
+    '@cluster0.3u6wx.mongodb.net/webdemoapi?retryWrites=true&w=majority',
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useCreateIndex: true
+    }).then(
+        console.log("Mongoose connected!")
+    ).catch(err => {
+        console.log("Mongoose connection failed!", err)
+    })
 
 
 app.use('/uploads', express.static('uploads'));
@@ -47,47 +53,10 @@ const userRouters = require('./api/routes/user');
 const adminRouters = require('./api/routes/admin');
 const uploadRouters = require('./api/routes/upload');
 
+app.listen(PORT, function () {
+    console.log('Ready!');
+});
 
-// const Product = require('./api/Models/Product');
-
-
-// app.post('/api/dangnhap', function (req, res) {
-//     if (req.body.username == 'liem' && req.body.password == 'liem123') {
-//         const token = jwt.sign({ ten: 'liem' }, 'liem123', { algorithm: 'HS256', expiresIn: '2h' });
-//         res.send('Xin Chào ' + req.body.username);
-//         res.json({ access__token: token });
-//     }
-//     else {
-//         res.send('Đăng Nhập Thất Bại!');
-//     }
-// })
-
-// app.use(function (req, res, next) {
-//     if (req.headers && req.headers.authorization && String(req.headers.authorization.split(' ')[0]).toLowerCase == 'beaber') {
-//         const token = req.headers.authorization.split(' ')[1];
-//         jwt.verify(token, 'liem123', function (err, decode) {
-//             if (err) {
-//                 return res.status(403).send({
-//                     massages: 'Token Invalid'
-//                 });
-//             }
-//             else {
-//                 return next();
-//             }
-//         })
-//     }
-//     else {
-//         return res.status(403).send({
-//             massages: 'Unauthorized'
-//         })
-//     }
-// })
-
-app.get('/api/test', function (req, res) {
-    // res.cookie('cookie', 'monster');
-    res.json({ message: 'Testtt !', cookie: req.cookies });
-
-})
 app.use('/product', productRouters);
 app.use('/order', orderRouters);
 app.use('/user', userRouters);
@@ -95,26 +64,28 @@ app.use('/admin', adminRouters);
 app.use('/admin', uploadRouters);
 
 app.get('/', function (req, res) {
-    res.status(200).json({
-        waring: 'API này của bố mầy'
+    return res.status(200).json({
+        message: 'Ok'
     })
 })
 
-app.use((req, res, next) => {
-    const error = new Error('Error...');
-    error.status = 404;
-    next(error);
+app.get('/api/cookie', function (req, res) {
+    res.status(200).json({ message: 'Cookie', cookie: req.cookies });
 })
 
-app.use((error, req, res, next) => {
-    res.status(error.status || 500);
-    res.json({
-        error: {
-            message: error.message
-        }
-    })
-})
+// app.use((req, res, next) => {
+//     const error = new Error('Error...');
+//     error.status = 404;
+//     next(error);
+// })
 
-app.listen(PORT, function () {
-    console.log('ok');
-});
+// app.use((error, req, res, next) => {
+//     res.status(error.status || 500);
+//     res.json({
+//         error: {
+//             message: error.message
+//         }
+//     })
+// })
+
+
