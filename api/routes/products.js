@@ -41,7 +41,7 @@ router.post('/', productController.product_add_product);
 
 router.delete('/:productId', productController.product_delete_product);
 
-router.patch('/:productId', checkAuth, productController.product_patch_product);
+router.patch('/:productId', productController.product_patch_product);
 
 
 

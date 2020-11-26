@@ -45,7 +45,7 @@ class APIfeatures {
 
 exports.product_get_all = async (req, res, next) => {
     try {
-        const features = new APIfeatures(Product.find(), req.query).filtering().sorting().paginating();
+        const features = new APIfeatures(Product.find().populate('Producer', 'ProducerName'), req.query).filtering().sorting().paginating();
         const products = await features.query;
 
         return res.status(200).json({
@@ -60,7 +60,7 @@ exports.product_get_all = async (req, res, next) => {
 
 exports.product_get_by_id = (req, res, next) => {
     const id = req.params.productId;
-    Product.findById(id)
+    Product.findById(id).populate('Producer', 'ProducerName')
         .exec()
         .then(docs => {
             if (docs) {
