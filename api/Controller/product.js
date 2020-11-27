@@ -55,11 +55,8 @@ class APIfeatures {
 
 exports.product_get_all = async (req, res, next) => {
     try {
-        const features = new APIfeatures(Product.find().populate('Producer', 'ProducerName'), req.query).filtering().sorting().paginating();
-
-        const products = await features.query;
-
         if (req.query['Producer']) {
+            const products = await Product.find().populate('Producer', 'ProducerName')
             var listProductByProducer = [];
             products.forEach((r) => {
                 if (r.Producer.ProducerName === req.query['Producer']) {
@@ -67,12 +64,17 @@ exports.product_get_all = async (req, res, next) => {
                 }
                 return listProductByProducer;
             });
+
             return res.status(200).json({
                 status: 'Success',
                 count: listProductByProducer.length,
                 product: listProductByProducer,
             });
         } else {
+            const features = new APIfeatures(Product.find().populate('Producer', 'ProducerName'), req.query).filtering().sorting().paginating();
+
+            const products = await features.query;
+
             return res.status(200).json({
                 status: 'Success',
                 count: products.length,
