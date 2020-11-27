@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cloudinary = require('../../cloudinary');
 const fs = require('fs');
 const { isArray } = require('util');
+const { DH_CHECK_P_NOT_PRIME } = require('constants');
 
 class APIfeatures {
     constructor(query, queryString) {
@@ -12,15 +13,24 @@ class APIfeatures {
 
     filtering() {
         const queryObj = { ...this.queryString };
-        const excludedFields = ['page', 'sort', 'limit'];
+        const excludedFields = ['page', 'sort', 'limit', 'Producer'];
 
         excludedFields.forEach(i => delete (queryObj[i]))
         let queryStr = JSON.stringify(queryObj);
 
         queryStr = queryStr.replace(/\b(gte|gt|lt|lte|regex)\b/g, match => '$' + match);
         this.query.find(JSON.parse(queryStr));
+        // var listProductByProducer = [];
+        // this.query.find().exec(function (err, result) {
+        //     result.forEach((r) => {
+        //         if (r.Producer.ProducerName === 'JBL') {
+        //             listProductByProducer.push(r);
+        //         }
+        //     });
 
-        return this
+        //     return listProductByProducer;
+        // });
+        return this;
     }
 
     sorting() {
@@ -46,13 +56,29 @@ class APIfeatures {
 exports.product_get_all = async (req, res, next) => {
     try {
         const features = new APIfeatures(Product.find().populate('Producer', 'ProducerName'), req.query).filtering().sorting().paginating();
+
         const products = await features.query;
 
-        return res.status(200).json({
-            status: 'Success',
-            count: products.length,
-            product: products
-        });
+        if (req.query['Producer']) {
+            var listProductByProducer = [];
+            products.forEach((r) => {
+                if (r.Producer.ProducerName === req.query['Producer']) {
+                    listProductByProducer.push(r);
+                }
+                return listProductByProducer;
+            });
+            return res.status(200).json({
+                status: 'Success',
+                count: listProductByProducer.length,
+                product: listProductByProducer,
+            });
+        } else {
+            return res.status(200).json({
+                status: 'Success',
+                count: products.length,
+                product: products,
+            });
+        }
     } catch (err) {
         return res.status(500).json({ error: err });
     }

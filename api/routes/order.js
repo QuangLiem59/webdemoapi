@@ -8,7 +8,7 @@ const Product = require('../Models/Product');
 const checkAuth = require('../Middleware/check-auth');
 const orderController = require('../Controller/order');
 
-router.get('/', checkAuth, orderController.order_get_all);
+router.get('/', orderController.order_get_all);
 
 router.get('/:orderId', checkAuth, orderController.order_get_by_id);
 
