@@ -246,7 +246,7 @@ exports.user_delete_user = (req, res, next) => {
 }
 
 exports.user_patch_user = (req, res, next) => {
-    const userId = req.params.userId;
+    const userId = req.userData.userId;
     const updateOps = {};
     for (const ops of req.body) {
         updateOps[ops.propName] = ops.value;
