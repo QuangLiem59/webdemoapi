@@ -250,6 +250,9 @@ exports.user_patch_user = (req, res, next) => {
     const updateOps = {};
     for (const ops of req.body) {
         if (ops.propName === 'password') {
+            if (ops.value.length < 6) {
+                return res.status(400).json({ message: 'Password is least 6 characters long' });
+            }
             bcrypt.hash(ops.value, 10, (err, hash) => {
                 if (err) {
                     return res.status(500).json({
@@ -262,6 +265,9 @@ exports.user_patch_user = (req, res, next) => {
             })
         }
         else {
+            if (ops.value.length < 1) {
+                return res.status(400).json({ message: 'Name is required!' });
+            }
             updateOps[ops.propName] = ops.value;
         }
     }
