@@ -286,6 +286,7 @@ exports.user_patch_user = (req, res, next) => {
                             message: 'User Updated',
                             request: {
                                 type: 'GET',
+                                result: result,
                                 url: 'http://localhost:2228/user/' + userId
                             }
                         })
