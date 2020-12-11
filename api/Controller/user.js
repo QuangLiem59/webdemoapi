@@ -250,7 +250,7 @@ exports.user_patch_user = (req, res, next) => {
     const updateOps = {};
     for (const ops of req.body) {
         if (ops.propName === 'password') {
-            bcrypt.hash(req.body.password, 10, (err, hash) => {
+            bcrypt.hash(ops.value, 10, (err, hash) => {
                 if (err) {
                     return res.status(500).json({
                         error: err,
