@@ -249,7 +249,21 @@ exports.user_patch_user = (req, res, next) => {
     const userId = req.userData.userId;
     const updateOps = {};
     for (const ops of req.body) {
-        updateOps[ops.propName] = ops.value;
+        if (ops.PropName === 'password') {
+            bcrypt.hash(req.body.password, 10, (err, hash) => {
+                if (err) {
+                    return res.status(500).json({
+                        error: err,
+                        message: 'Error!'
+                    })
+                } else {
+                    updateOps[ops.propName] = hash
+                }
+            })
+        }
+        else {
+            updateOps[ops.propName] = ops.value;
+        }
     }
     User.find({ email: updateOps.email })
         .exec()
@@ -264,7 +278,6 @@ exports.user_patch_user = (req, res, next) => {
                     .then(result => {
                         res.status(200).json({
                             message: 'User Updated',
-                            product: result,
                             request: {
                                 type: 'GET',
                                 url: 'http://localhost:2228/user/' + userId
@@ -274,7 +287,8 @@ exports.user_patch_user = (req, res, next) => {
                     .catch(err => {
                         console.log(err);
                         res.status(500).json({
-                            error: err
+                            error: err,
+                            message: 'Update Fail!'
                         })
                     })
             }
