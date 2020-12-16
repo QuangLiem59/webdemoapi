@@ -17,7 +17,8 @@ mongoose.connect('mongodb+srv://'
     {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-        useCreateIndex: true
+        useCreateIndex: true,
+        useFindAndModify: false
     }).then(
         console.log("Mongoose connected!")
     ).catch(err => {
