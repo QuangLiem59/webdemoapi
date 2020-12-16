@@ -24,4 +24,6 @@ router.get('/infor', checkAuth, userController.user_get_infor);
 
 router.patch('/update', checkAuth, userController.user_patch_user);
 
+router.patch('/addtocart', checkAuth, userController.user_add_to_cart);
+
 module.exports = router;

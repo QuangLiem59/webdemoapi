@@ -301,3 +301,18 @@ exports.user_patch_user = (req, res, next) => {
             }
         })
 }
+
+exports.user_add_to_cart = async (req, res) => {
+    try {
+        const user = await User.findById(req.userData.userId);
+        if (!user) res.status(400).json({ message: 'User does not exist!' });
+        await User.findOneAndUpdate(
+            { _id: req.user.id },
+            { cart: req.body.cart }
+        )
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        })
+    }
+}
