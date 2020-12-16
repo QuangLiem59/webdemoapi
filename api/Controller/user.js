@@ -306,10 +306,18 @@ exports.user_add_to_cart = async (req, res) => {
     try {
         const user = await User.findById(req.userData.userId);
         if (!user) res.status(400).json({ message: 'User does not exist!' });
-        await User.findOneAndUpdate(
+        const atcart = await User.findOneAndUpdate(
             { _id: req.user.id },
             { cart: req.body.cart }
         )
+        res.status(200).json({
+            message: 'Product Added!',
+            request: {
+                type: 'GET',
+                result: atcart,
+                url: 'http://localhost:2228/user/' + userId
+            }
+        })
     } catch (error) {
         res.status(500).json({
             message: error.message
