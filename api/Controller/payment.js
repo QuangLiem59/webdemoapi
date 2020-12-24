@@ -30,7 +30,7 @@ const paymentController = {
                 numberphone
             })
             cart.filter(item => {
-                return sold(item._id, item.quantity, item.sold);
+                return sold(item._id, item.quantity, item.Sold);
             })
             await newPayment.save();
             res.json(newPayment);
