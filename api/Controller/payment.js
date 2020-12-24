@@ -43,7 +43,7 @@ const paymentController = {
 
 const sold = async (id, quantity, oldsold) => {
     await Product.findOneAndUpdate({ _id: id }, {
-        sold: quantity + oldsold
+        Sold: quantity + oldsold
     })
 }
 
