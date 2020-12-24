@@ -54,6 +54,7 @@ const userRouters = require('./api/routes/user');
 const adminRouters = require('./api/routes/admin');
 const uploadRouters = require('./api/routes/upload');
 const producerRouters = require('./api/routes/producer');
+const paymentRouters = require('./api/routes/payment');
 
 app.listen(PORT, function () {
     console.log('Ready!');
@@ -65,6 +66,7 @@ app.use('/user', userRouters);
 app.use('/admin', adminRouters);
 app.use('/admin', uploadRouters);
 app.use('/producer', producerRouters);
+app.use('/payment', paymentRouters);
 
 app.get('/', function (req, res) {
     return res.status(200).json({
