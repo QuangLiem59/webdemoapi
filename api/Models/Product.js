@@ -9,7 +9,7 @@ const schemaProduct = new mongoose.Schema({
     Information: { type: Object, required: true },
     Details: { type: String, trim: true, required: true },
     Category: { type: String, trim: true, required: true },
-    Producer: { type: String, trim: true, required: true },
+    Producer: { type: mongoose.Schema.Types.ObjectId, ref: 'Producer', required: true },
     Warranties: { type: Number, trim: true, required: true },
     Sold: { type: Number, default: 0 },
     Checked: { type: Boolean, default: false },

@@ -1,7 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
-const multer = require('multer');
 
 const checkAuth = require('../Middleware/check-auth');
 
@@ -33,7 +31,6 @@ const checkAuth = require('../Middleware/check-auth');
 //     fileFilter: fileFilter
 // });
 
-const Product = require('../Models/Product');
 const productController = require('../Controller/product');
 
 router.get('/', productController.product_get_all);
@@ -44,7 +41,7 @@ router.post('/', productController.product_add_product);
 
 router.delete('/:productId', productController.product_delete_product);
 
-router.patch('/:productId', checkAuth, productController.product_patch_product);
+router.patch('/:productId', productController.product_patch_product);
 
 
 

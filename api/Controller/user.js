@@ -246,10 +246,30 @@ exports.user_delete_user = (req, res, next) => {
 }
 
 exports.user_patch_user = (req, res, next) => {
-    const userId = req.params.userId;
+    const userId = req.userData.userId;
     const updateOps = {};
     for (const ops of req.body) {
-        updateOps[ops.propName] = ops.value;
+        if (ops.propName === 'password') {
+            if (ops.value.length < 6) {
+                return res.status(400).json({ message: 'Password is least 6 characters long' });
+            }
+            bcrypt.hash(ops.value, 10, (err, hash) => {
+                if (err) {
+                    return res.status(500).json({
+                        error: err,
+                        message: 'Error!'
+                    })
+                } else {
+                    updateOps[ops.propName] = hash
+                }
+            })
+        }
+        else {
+            if (ops.value.length < 1) {
+                return res.status(400).json({ message: 'Name is required!' });
+            }
+            updateOps[ops.propName] = ops.value;
+        }
     }
     User.find({ email: updateOps.email })
         .exec()
@@ -264,9 +284,9 @@ exports.user_patch_user = (req, res, next) => {
                     .then(result => {
                         res.status(200).json({
                             message: 'User Updated',
-                            product: result,
                             request: {
                                 type: 'GET',
+                                result: result,
                                 url: 'http://localhost:2228/user/' + userId
                             }
                         })
@@ -274,9 +294,26 @@ exports.user_patch_user = (req, res, next) => {
                     .catch(err => {
                         console.log(err);
                         res.status(500).json({
-                            error: err
+                            error: err,
+                            message: 'Update Fail!'
                         })
                     })
             }
         })
+}
+
+exports.user_add_to_cart = async (req, res) => {
+    try {
+        const user = await User.findById(req.userData.userId);
+        if (!user) res.status(400).json({ message: 'User does not exist!' });
+        const addtocart = await User.findOneAndUpdate(
+            { _id: req.userData.userId },
+            { cart: req.body.cart }
+        )
+        res.status(200).json({ message: 'Cart Update!', addtocart });
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        })
+    }
 }
